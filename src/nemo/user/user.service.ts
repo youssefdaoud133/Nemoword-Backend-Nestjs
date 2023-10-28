@@ -7,14 +7,11 @@ import { promises } from 'dns';
 
 @Injectable()
 export class UserService {
-  // constructor(
-  //   @InjectRepository(User)
-  //   private usersRepository: Repository<User>,
-  // ) {}
   constructor(
-    @Inject('User_REPOSITORY')
+    @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
+
   async CreateUser(body: CreateUserDto, WhoCreated: User): Promise<any> {
     return { newuser: await this.usersRepository.save(body), WhoCreated };
   }

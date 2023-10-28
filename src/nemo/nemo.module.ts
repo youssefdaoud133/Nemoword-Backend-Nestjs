@@ -11,17 +11,17 @@ import { Account } from './account/entity/account.entity';
   imports: [
     UserModule,
     AuthModule,
-    // TypeOrmModule.forRoot({
-    //   type: 'mysql',
-    //   host: '127.0.0.1',
-    //   port: 3306,
-    //   username: 'root',
-    //   password: 'tereza17/3',
-    //   database: 'nemo_api_v1',
-    //   entities: [User, Account],
-    //   synchronize: true,
-    // }),
-    // TypeOrmModule.forFeature([User, Account]),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: '127.0.0.1',
+      port: 3306,
+      username: 'root',
+      password: 'tereza17/3',
+      database: 'nemo_api_v1',
+      entities: [User, Account],
+      synchronize: true,
+    }),
+    TypeOrmModule.forFeature([User, Account]),
 
     ConfigModule.forRoot({
       envFilePath: 'config.env',
