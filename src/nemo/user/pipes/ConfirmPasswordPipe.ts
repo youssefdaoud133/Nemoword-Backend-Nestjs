@@ -13,6 +13,10 @@ export class ConfirmPasswordPipe implements PipeTransform {
         'Password and confirm password do not match',
       );
     }
+
+    // Remove the ConfirmPassword property
+    delete value.ConfirmPassword;
+
     return value;
   }
 }
