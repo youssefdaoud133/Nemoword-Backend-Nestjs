@@ -6,18 +6,26 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { FindAllUsersDto } from './dto/find-all-users.dto';
+import { SecurityService } from 'src/security/security.service';
 
 const client = new PrismaClient();
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private securityService: SecurityService,
+  ) {}
 
-  async CreateUser(body: any): Promise<any> {
+  async CreateUser(body: CreateUserDto | any): Promise<any> {
+    // hash password
+    body.password = await this.securityService.HashPassword(body.password);
     try {
       return await this.prisma.user.create({
         data: body,
       });
     } catch (e) {
+      console.log(e);
+
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002') {
           // Throw a custom exception with a specific status code and message
