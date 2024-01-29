@@ -16,15 +16,15 @@ import { AuthGuard } from './auth.guard';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  // @HttpCode(HttpStatus.OK)
-  // @Post('login')
-  // signIn(@Body() SignInDto: SignInDto) {
-  //   return this.authService.signIn(SignInDto.email, SignInDto.password);
-  // }
-  // @HttpCode(HttpStatus.OK)
-  // @UseGuards(AuthGuard)
-  // @Get('myprofile')
-  // myprofile(@Req() request: any) {
-  //   return this.authService.myprofile(request.user);
-  // }
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  signIn(@Body() SignInDto: SignInDto) {
+    return this.authService.signIn(SignInDto.email, SignInDto.password);
+  }
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  @Get('myprofile')
+  myprofile(@Req() request: any) {
+    return request.user;
+  }
 }
