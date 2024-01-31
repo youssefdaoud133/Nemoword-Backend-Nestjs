@@ -72,7 +72,7 @@ export class UserService {
 
     if (!user) {
       throw new HttpException(
-        `User with Email ${email} not found`,
+        `Invalid email or password`,
         HttpStatus.NOT_FOUND,
       );
     }

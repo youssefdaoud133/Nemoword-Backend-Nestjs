@@ -5,6 +5,7 @@ import { UserModule } from 'src/nemo/user/user.module';
 import { jwtConstants } from './constants';
 import { JwtModule } from '@nestjs/jwt';
 import { SecurityModule } from 'src/security/security.module';
+import { AuthGuard } from './auth.guard';
 
 @Module({
   controllers: [AuthController],
@@ -17,6 +18,7 @@ import { SecurityModule } from 'src/security/security.module';
       signOptions: {},
     }),
   ],
-  providers: [AuthService],
+  providers: [AuthService, AuthGuard],
+  exports: [AuthGuard, AuthService],
 })
 export class AuthModule {}

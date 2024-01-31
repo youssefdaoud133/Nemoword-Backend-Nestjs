@@ -36,19 +36,21 @@ export class AuthService {
     }
   }
   // sign up endpoint
-  async signUp(body: SignUpDto): Promise<{ status: string } | any> {
+  async signUp(
+    body: SignUpDto,
+  ): Promise<{ status: string; accept: boolean } | any> {
     const data: FindAllUsersDto = await this.usersService.CreateUser(body);
 
     // check if email is signed up or not
     if (data.username) {
-      return { status: 'your account has been signed up' };
+      return { status: 'your account has been signed up', accept: true };
     } else {
-      return { status: 'you have not been signed up' };
+      return { status: 'you have not been signed up', accept: false };
     }
   }
-  async myprofile(myprofile: { sub: number; email: string }): Promise<any> {
-    const user = await this.usersService.FindOneId(myprofile.sub);
+  // async myprofile(myprofile: { sub: number; email: string }): Promise<any> {
+  //   const user = await this.usersService.FindOneId(myprofile.sub);
 
-    return user;
-  }
+  //   return user;
+  // }
 }

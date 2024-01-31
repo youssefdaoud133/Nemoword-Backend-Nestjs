@@ -38,6 +38,8 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('myprofile')
   myprofile(@Req() request: any) {
+    delete request.user.password;
+    delete request.user.createdAt;
     return request.user;
   }
 }

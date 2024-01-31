@@ -58,6 +58,31 @@ export class FishService {
       );
     }
   }
+  async FindAllFishesRelatedToUser(userid): Promise<any[]> {
+    try {
+      return await this.prisma.fish.findMany({
+        where: {
+          userId: userid, // Filter fishes by userId
+        },
+        include: {
+          user: true, // This includes the user details for each post
+        },
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        // Handle other Prisma-specific errors or throw a generic exception
+        throw new HttpException(
+          'Database error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+      // Handle other unexpected errors or throw a generic exception
+      throw new HttpException(
+        'Internal Server Error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 
   async FindOneId(id: number): Promise<FindAllFishesDto> {
     const fish: FindAllFishesDto = await this.prisma.fish.findUnique({

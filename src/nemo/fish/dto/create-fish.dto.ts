@@ -7,8 +7,6 @@ import {
 } from 'class-validator';
 
 export class CreateFishDto {
-  @IsNumber()
-  @IsNotEmpty()
   userId: number;
 
   @IsString()
