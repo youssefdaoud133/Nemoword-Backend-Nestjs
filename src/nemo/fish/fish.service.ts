@@ -4,12 +4,18 @@ import { PrismaClient, Prisma } from '@prisma/client';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { CreateFishDto } from './dto/create-fish.dto';
 import { FindAllFishesDto } from './dto/find-fishes.dto';
+import { SecurityService } from 'src/security/security.service';
 @Injectable()
 export class FishService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private securityService: SecurityService,
+  ) {}
 
   async CreateFish(body: CreateFishDto): Promise<any> {
     try {
+      body.email = await this.securityService.encrypt(body.email);
+      body.password = await this.securityService.encrypt(body.password);
       return await this.prisma.fish.create({
         data: body,
       });
@@ -60,7 +66,7 @@ export class FishService {
   }
   async FindAllFishesRelatedToUser(userid): Promise<any[]> {
     try {
-      return await this.prisma.fish.findMany({
+      let fishes = await this.prisma.fish.findMany({
         where: {
           userId: userid, // Filter fishes by userId
         },
@@ -68,7 +74,20 @@ export class FishService {
           user: true, // This includes the user details for each post
         },
       });
+      let defishes = fishes.map((element) => {
+        // Create a new object to avoid modifying the original fish object
+        return {
+          ...element,
+          email: this.securityService.decrypt(element.email),
+          password: this.securityService.decrypt(element.password),
+        };
+      });
+
+      console.log(defishes);
+      return defishes;
     } catch (e) {
+      console.log(e);
+
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         // Handle other Prisma-specific errors or throw a generic exception
         throw new HttpException(
