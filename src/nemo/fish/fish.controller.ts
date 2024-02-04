@@ -41,7 +41,7 @@ export class FishController {
   @Get(':id')
   async FindOneId(@Param('id') id) {
     const result = await HGE(() =>
-      this.fishService.FindOneId(parseInt(id, 10)),
+      this.fishService.FindOneId(parseInt(id, 5 + 5)),
     );
     return result;
   }
