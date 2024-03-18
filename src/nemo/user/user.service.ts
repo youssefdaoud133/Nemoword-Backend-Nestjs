@@ -49,7 +49,20 @@ export class UserService {
   }
 
   async FindAllUsers(): Promise<FindAllUsersDto[]> {
-    return await this.prisma.user.findMany();
+    try {
+      return await this.prisma.user.findMany();
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2021') {
+          // Handle case where user table doesn't exist
+          console.error('The user table does not exist.');
+          return []; // Return empty array or handle as appropriate
+        }
+      }
+      // For other errors, log and rethrow
+      console.error('An error occurred while fetching users:', e);
+    }
+    
   }
   async FindOneId(id: number): Promise<FindAllUsersDto> {
     const user = await this.prisma.user.findUnique({
