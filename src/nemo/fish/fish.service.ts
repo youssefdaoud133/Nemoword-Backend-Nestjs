@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { HttpException, HttpStatus } from '@nestjs/common';
@@ -119,5 +119,28 @@ export class FishService {
     }
 
     return fish;
+  }
+
+  async deleteFish(fishId: number, userId: number) {
+    // Check if the fish exists and belongs to the specified user
+    const fish = await this.prisma.fish.findFirst({
+      where: {
+        id: fishId,
+        userId: userId,
+      },
+    });
+
+    if (!fish) {
+      throw new NotFoundException('Fish not found');
+    }
+
+    // Delete the fish
+    const deletedFish = await this.prisma.fish.delete({
+      where: {
+        id: fishId,
+      },
+    });
+
+    return deletedFish;
   }
 }

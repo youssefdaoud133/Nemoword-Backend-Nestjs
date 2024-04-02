@@ -45,4 +45,16 @@ export class FishController {
     );
     return result;
   }
+  @UseGuards(AuthGuard)
+  @Delete(':id')
+  async deleteFish(@Param('id') id: string,@Req() request: any) {
+    try{
+      let res = await this.fishService.deleteFish(parseInt(id, 10),request.user.id);
+      return {
+        response: `Removed successfully`
+      }
+    }catch(e){
+     return e;
+    }
+  }
 }

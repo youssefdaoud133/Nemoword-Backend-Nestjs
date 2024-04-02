@@ -14,7 +14,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     let status = 500;
-    let message = 'Internal Server Error';
+    let message  = 'Internal Server Error';
 
     // check case if messages in response
     if (exception.response.message) {
