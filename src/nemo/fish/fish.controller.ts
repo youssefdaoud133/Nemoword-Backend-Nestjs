@@ -16,6 +16,7 @@ import { CreateFishDto } from './dto/create-fish.dto';
 import HGE from 'src/HGE';
 import { Prisma } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { UpdateFishDto } from './dto/Update-fish.dto';
 
 @Controller('fish')
 export class FishController {
@@ -38,10 +39,11 @@ export class FishController {
     return this.fishService.FindAllFishesRelatedToUser(request.user.id);
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
-  async FindOneId(@Param('id') id) {
+  async FindOneId(@Param('id') id,@Req() request: any) {
     const result = await HGE(() =>
-      this.fishService.FindOneId(parseInt(id, 5 + 5)),
+      this.fishService.FindOneId(parseInt(id,10),request.user.id),
     );
     return result;
   }
@@ -51,10 +53,24 @@ export class FishController {
     try{
       let res = await this.fishService.deleteFish(parseInt(id, 10),request.user.id);
       return {
-        response: `Removed successfully`
+        response: {message : `Removed successfully`}
       }
     }catch(e){
      return e;
     }
   }
+
+  @UseGuards(AuthGuard)
+  @Put(':id') // Define a PUT route for updating a fish
+  async updateFish(@Param('id') id: string, @Body() updateFishDto: UpdateFishDto,@Req() request: any) {
+    try {
+      const updatedFish = await this.fishService.updateFish(request.user.id,id,updateFishDto);
+      return {
+        response: updatedFish
+      };
+    } catch (e) {
+      return e;
+    }
+  }
+
 }

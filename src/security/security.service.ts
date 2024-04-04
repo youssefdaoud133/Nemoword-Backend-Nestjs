@@ -27,14 +27,14 @@ export class SecurityService {
     return isMatch;
   }
   encrypt(text: string): string {
-    try {
+    // try {
       const cipher = crypto.createCipheriv(this.algorithm, this.key, this.iv);
       let encrypted = cipher.update(text, 'utf-8', 'hex');
       encrypted += cipher.final('hex');
       return encrypted;
-    } catch (e) {
-      console.log(e);
-    }
+    // } catch (e) {
+    //   console.log(e);
+    // }
   }
 
   decrypt(encryptedText: string): string {
