@@ -130,18 +130,6 @@ Authorization: Bearer <JWT_TOKEN>
 }
 ```
 
----
 
-## 🧑‍💻 Contributing
-
-Pull requests are welcome! For major changes, please open an issue first.
-
----
-
-## 📄 License
-
-This project is UNLICENSED.
-
----
 
 > Made with ❤️ using NestJS & Prisma
